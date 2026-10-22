@@ -1,7 +1,7 @@
 import time
 from machine import I2C, Pin
 
-#I2C Confuguration
+#I2C Configuration
 i2c = I2C(0, scl=Pin(17), sda=Pin(16))
 SHT40_ADDR = 0x44
 
