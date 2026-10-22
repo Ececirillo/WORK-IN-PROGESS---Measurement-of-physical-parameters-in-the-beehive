@@ -1,24 +1,23 @@
 import time
 from machine import I2C, Pin
 
-# Configurazione I2C con i pin 16 (SDA) e 17 (SCL)
+#I2C Confuguration
 i2c = I2C(0, scl=Pin(17), sda=Pin(16))
 SHT40_ADDR = 0x44
 
 def leggi_sensore():
     try:
-        # Invia il comando di misura standard ad alta precisione (0xFD)
         i2c.writeto(SHT40_ADDR, b'\xfd')
         time.sleep_ms(10)
         
-        # Legge i 6 byte restituiti dal sensore
+        #read
         data = i2c.readfrom(SHT40_ADDR, 6)
         
-        # Calcolo della temperatura
+        #temp
         t_raw = data[0] << 8 | data[1]
         temp = -45 + 175 * t_raw / 65535.0
         
-        # Calcolo dell'umidità
+        #hum
         h_raw = data[3] << 8 | data[4]
         hum = -6 + 125 * h_raw / 65535.0
         
@@ -27,7 +26,7 @@ def leggi_sensore():
         print("Errore di comunicazione con l'SHT40:", e)
         return None, None
 
-# Ciclo continuo per testare le letture ogni 2 secondi
+# 2 sec cycle
 while True:
     t, h = leggi_sensore()
     if t is not None and h is not None:
